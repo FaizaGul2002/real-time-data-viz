@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Weather Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Real-Time Weather Dashboard</h1>
+    <canvas id="weatherChart"></canvas>
+    <script>
+        async function fetchWeatherData() {
+            const response = await fetch('/weather/London');
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            } else {
+                console.error('Error fetching weather data:', response.statusText);
+                return null;
+            }
+        }
+
+        async function renderChart() {
+            const data = await fetchWeatherData();
+            if (data) {
+                const ctx = document.getElementById('weatherChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Temperature (°C)', 'Humidity (%)', 'Pressure (hPa)'],
+                        datasets: [{
+                            label: 'Weather Data',
+                            data: [
+                                data.main.temp - 273.15, // Convert Kelvin to Celsius
+                                data.main.humidity,
+                                data.main.pressure
+                            ],
+                            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                            borderColor: ['rgba(75, 192, 192, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error('No data available to display');
+            }
+        }
+
+        renderChart();
+    </script>
+</body>
+</html>
