@@ -30,7 +30,7 @@ A responsive web application that provides real-time weather data for multiple c
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/real-time-weather-dashboard.git
+   git clone https://github.com/FaizaGul2002/real-time-weather-dashboard.git
    cd real-time-weather-dashboard
    ```
 2. **Create and activate a virtual environment**:
