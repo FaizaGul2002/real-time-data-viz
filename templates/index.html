@@ -5,56 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Weather Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">  <!-- Optional if you have custom styles -->
+    <style>
+        #errorMessage {
+            display: none;
+            color: red;
+        }
+        .compare-section {
+            display: none;
+        }
+    </style>
 </head>
-<body>
-    <h1>Real-Time Weather Dashboard</h1>
-    <canvas id="weatherChart"></canvas>
-    <script>
-        async function fetchWeatherData() {
-            const response = await fetch('/weather/London');
-            if (response.ok) {
-                const data = await response.json();
-                return data;
-            } else {
-                console.error('Error fetching weather data:', response.statusText);
-                return null;
-            }
-        }
-
-        async function renderChart() {
-            const data = await fetchWeatherData();
-            if (data) {
-                const ctx = document.getElementById('weatherChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Temperature (°C)', 'Humidity (%)', 'Pressure (hPa)'],
-                        datasets: [{
-                            label: 'Weather Data',
-                            data: [
-                                data.main.temp - 273.15, // Convert Kelvin to Celsius
-                                data.main.humidity,
-                                data.main.pressure
-                            ],
-                            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-                            borderColor: ['rgba(75, 192, 192, 1)'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            } else {
-                console.error('No data available to display');
-            }
-        }
-
-        renderChart();
-    </script>
+<body class="container">
+    <h1 class="text-center my-4">Real-Time Weather Dashboard</h1>
+    <div class="form-group">
+        <input type="text" id="city" class="form-control" placeholder="Enter city name" />
+    </div>
+    <div class="text-center mb-4">
+        <button class="btn btn-primary" id="getWeatherBtn">Get Weather</button>
+        <button class="btn btn-secondary" id="getForecastBtn">Get Forecast</button>
+        <button class="btn btn-danger" id="clearBtn">Clear</button>
+    </div>
+    <div id="errorMessage" class="text-center">Sorry, we don't have data for this city.</div>
+    <div id="sunriseSunset" class="text-center mb-4"></div>
+    <canvas id="weatherChart" class="mb-4"></canvas>
+    <div class="text-center mb-4">
+        <button class="btn btn-info" id="compareBtn">Compare Cities</button>
+    </div>
+    <div class="compare-section">
+        <h2 class="text-center my-4">Compare Cities</h2>
+        <div class="form-group">
+            <input type="text" id="city1" class="form-control" placeholder="Enter first city name" />
+        </div>
+        <div class="form-group">
+            <input type="text" id="city2" class="form-control" placeholder="Enter second city name" />
+        </div>
+        <div class="text-center mb-4">
+            <button class="btn btn-primary" id="compareWeatherBtn">Compare Weather</button>
+            <button class="btn btn-secondary" id="compareForecastBtn">Compare Forecast</button>
+        </div>
+        <canvas id="compareChart" class="mb-4"></canvas>
+    </div>
+    <script src="/static/js/scripts.js"></script>
 </body>
 </html>
+
+
